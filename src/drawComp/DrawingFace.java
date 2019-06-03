@@ -12,8 +12,12 @@ import javafx.scene.layout.*;
 import javafx.scene.canvas.*;
 import javafx.scene.shape.*;
 import javafx.scene.image.*;
+import javafx.scene.text.*;
 import javafx.stage.Stage;
-import java.util.Stack;
+
+import java.util.ArrayList;
+
+import general.Prompt;
 
 public class DrawingFace extends Application {
 
@@ -22,20 +26,13 @@ public class DrawingFace extends Application {
 		// objects
 		Pane root = new Pane(); // base for all layouts
 		StackPane pane = new StackPane(); // holds the canvas
-		Canvas canvas = new Canvas(350, 390); // canvas
+		Canvas canvas = new Canvas(350, 350); // canvas
 		DrawingTools tool = new DrawingTools();
-		Stack undoHistory = new Stack();
+		Prompt prompt = new Prompt();
 
 		Button btnClear = new Button("Clear"); // clear button
 		Button btnUndo = new Button("Undo"); // clear button
-
 		btnUndo.setLayoutX(100);
-
-		// colour palate objects
-		Rectangle blue = new Rectangle(30, 30);
-		Rectangle red = new Rectangle(30, 30);
-		Rectangle yellow = new Rectangle(30, 30);
-		Rectangle black = new Rectangle(30, 30);
 
 		// GraphicsContext
 		GraphicsContext gc;
@@ -46,38 +43,58 @@ public class DrawingFace extends Application {
 		pane.setLayoutX(50); // find a way to center horizontally without doing it manually!!
 		pane.setLayoutY(70);
 
+		// get drawing prompt
+		ArrayList<String> wordList = new ArrayList<String>();
+		wordList = prompt.getWordList();
+		String word = prompt.getWord(wordList);
+
+		// set up and display word prompt
+		Rectangle promptBase = new Rectangle(250, 55);
+		promptBase.setFill(Color.DARKTURQUOISE);
+		promptBase.setLayoutX(30);
+		promptBase.setLayoutY(45);
+
+		Text wordPrompt = new Text(word);
+		wordPrompt.setFont(Font.font("Comic Sans MS", 36));
+		wordPrompt.setFill(Color.WHITE);
+		wordPrompt.setLayoutX(55);
+		wordPrompt.setLayoutY(85);
+
 		// set up eraser
-		Image eraserImage = new Image("file:src/drawComp/eraser.png"); // loads image
+		Image eraserImage = new Image("file:src/resources/eraser.png"); // loads image
 		ImageView eraser = new ImageView();
 		eraser.setImage(eraserImage);
 		eraser.setFitWidth(50);
 		eraser.setPreserveRatio(true);
 		eraser.setLayoutX(340);
-		eraser.setLayoutY(480);
+		eraser.setLayoutY(435);
 
 		// set up brush
 		gc.setStroke(Color.BLACK);
 		gc.setLineWidth(2);
 
-		// set up palate
+		// set up colour selector
+		Rectangle blue = new Rectangle(30, 30);
 		blue.setFill(Color.BLUE);
 		blue.setLayoutX(55);
-		blue.setLayoutY(480);
+		blue.setLayoutY(435);
 
+		Rectangle red = new Rectangle(30, 30);
 		red.setFill(Color.RED);
 		red.setLayoutX(95);
+		red.setLayoutY(435);
 
-		red.setLayoutY(480);
-
+		Rectangle yellow = new Rectangle(30, 30);
 		yellow.setFill(Color.YELLOW);
 		yellow.setLayoutX(135);
-		yellow.setLayoutY(480);
+		yellow.setLayoutY(435);
 
+		Rectangle black = new Rectangle(30, 30);
 		black.setFill(Color.BLACK);
 		black.setLayoutX(175);
-		black.setLayoutY(480);
+		black.setLayoutY(435);
 
-		// event handlers
+		// EVENT HANDLERS //
 
 		// eraser
 		eraser.setOnMouseClicked(new EventHandler<MouseEvent>() {
@@ -127,7 +144,7 @@ public class DrawingFace extends Application {
 			}
 		});
 
-		// stop path 
+		// stop path
 		canvas.setOnMouseReleased(new EventHandler<MouseEvent>() {
 			public void handle(MouseEvent event) {
 				gc.lineTo(event.getX(), event.getY());
@@ -135,7 +152,7 @@ public class DrawingFace extends Application {
 				gc.closePath();
 			}
 		});
-		
+
 		// clears the entire canvas
 		btnClear.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event) {
@@ -146,7 +163,7 @@ public class DrawingFace extends Application {
 		// undo the last action
 		btnUndo.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event) {
-				gc.clearRect(0, 0, 350, 390);
+				gc.clearRect(0, 0, 350, 350);
 			}
 		});
 
@@ -156,7 +173,7 @@ public class DrawingFace extends Application {
 
 		// adding all GUI elements
 		pane.getChildren().addAll(canvas);
-		root.getChildren().addAll(pane, btnClear, blue, red, yellow, black, eraser, btnUndo);
+		root.getChildren().addAll(pane, btnClear, blue, red, yellow, black, eraser, btnUndo, promptBase, wordPrompt);
 
 		// creates and shows the window
 		primaryStage.setTitle("Drawing Application");
