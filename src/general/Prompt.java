@@ -19,14 +19,14 @@ public class Prompt {
 		return wordList;
 	}
 	
-	public int getWordIndex(ArrayList<String> wordList) {
+	public int setWordIndex(ArrayList<String> wordList) {
 		Random rand = new Random();
 		int index = rand.nextInt(wordList.size());
 		return index;
 	}
-
+	
 	public String getWord(ArrayList<String> wordList) {	
-		String word = wordList.get(getWordIndex(wordList));
+		String word = wordList.get(setWordIndex(wordList));
 		return word;
 	}
 
