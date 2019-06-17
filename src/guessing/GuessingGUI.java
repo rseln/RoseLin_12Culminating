@@ -1,6 +1,6 @@
 package guessing;
 
-import java.io.IOException;
+import java.io.IOException; 
 import java.net.ConnectException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
@@ -22,17 +22,24 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import networking.*;
 
 public class GuessingGUI extends Application {
 	private int portNumber = 2000;
-	public static ArrayList<Thread> threads;
+	private String ServerAddress;
 
 	public static void main(String[] args) {
 		launch();
 	}
 
 	public void start(Stage primaryStage) throws Exception {
-		threads = new ArrayList<Thread>();
+		//client 
+		Client client = new Client();
+		client.setServerAddr(ServerAddress);
+		client.setPort(portNumber);
+		client.setName("Client1");
+		client.connect();
+		
 		// objects
 		Pane root = new Pane(); // base for all layouts
 		StackPane pane = new StackPane(); // holds the canvas
@@ -135,7 +142,7 @@ public class GuessingGUI extends Application {
 
 		// set up textfield to input host name
 		TextField hostNameInput = new TextField();
-		String hostName = hostNameInput.getText();
+		String ServerAddress = hostNameInput.getText();
 
 		// set up error message (appears if hostName is not valid)
 		Label errorLabel = new Label();
@@ -177,7 +184,13 @@ public class GuessingGUI extends Application {
 			}
 
 		});
+		
+		connectBtn.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent event) {
+				
+			}
 
+		});
 		// GraphicsContext
 		GraphicsContext gc;
 		gc = canvas.getGraphicsContext2D();

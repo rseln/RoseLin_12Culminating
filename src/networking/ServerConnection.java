@@ -1,4 +1,4 @@
-package drawing;
+package networking;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;

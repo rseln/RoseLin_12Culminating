@@ -1,10 +1,9 @@
 package drawing;
 
-import javafx.application.Application;
+import javafx.application.Application; 
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.event.ActionEvent;
-import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.*;
 import javafx.scene.Scene;
@@ -16,6 +15,7 @@ import javafx.scene.text.*;
 import javafx.scene.control.*;
 import javafx.scene.SnapshotParameters;
 import javafx.stage.Stage;
+import networking.*;
 
 import java.io.IOException;
 import java.net.ConnectException;
@@ -33,7 +33,10 @@ public class DrawingGUI extends Application implements ConnectionListener {
 	}
 
 	public void start(Stage primaryStage) throws Exception {
-
+		//server
+		Server server = new Server("localhost", portNumber);
+		server.addConnectionListener(this);
+	
 		// objects
 		Pane root = new Pane(); // base for all layouts
 		StackPane pane = new StackPane(); // holds the canvas
@@ -75,9 +78,6 @@ public class DrawingGUI extends Application implements ConnectionListener {
 		// set up screenshot
 		SnapshotParameters params = new SnapshotParameters();
 		params.setFill(Color.TRANSPARENT);
-
-		// set up button for client server port connection
-		Button portApprovalButton = new Button("Done");
 
 		// set up error message
 		Label errorLabel = new Label();
@@ -168,27 +168,15 @@ public class DrawingGUI extends Application implements ConnectionListener {
 			}
 		});
 
-		// submits drawing
-		submit.setOnAction(new EventHandler<ActionEvent>() {
-			public void handle(ActionEvent event) {
-				gc.clearRect(0, 0, 350, 390);
-			}
-		});
-
+		//sends information over to the connected client 
 		submit.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent Event) {
+				server.WaitForConnections();
 				WritableImage image = canvas.snapshot(params, null); // take snapshot of canvas
 			}
 		});
 
-		portApprovalButton.setOnAction(new EventHandler<ActionEvent>() {
-
-			@Override
-			public void handle(ActionEvent event) {
-
-			}
-		});
 
 		// set up scene
 		Scene scene = new Scene(root, 450, 550);
@@ -196,8 +184,7 @@ public class DrawingGUI extends Application implements ConnectionListener {
 
 		// adding all GUI elements
 		pane.getChildren().addAll(canvas);
-		root.getChildren().addAll(pane, submit, blue, red, yellow, black, eraser, promptBase, wordPrompt, errorLabel,
-				portApprovalButton);
+		root.getChildren().addAll(pane, submit, blue, red, yellow, black, eraser, promptBase, wordPrompt, errorLabel);
 
 		// creates and shows the window
 		primaryStage.setTitle("Drawing Application");

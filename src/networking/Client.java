@@ -1,4 +1,4 @@
-package guessing;
+package networking;
 import java.io.DataInputStream; 
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -8,7 +8,8 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Scanner;
-import drawing.Server;
+
+import networking.Server;
 
 public class Client {
 	private String name;
@@ -100,6 +101,7 @@ public class Client {
             	@Override
             	public void run() {
             		String msg;
+            		
             		// initially, get name of server
             		serverName = read();
             		server.newConnection(serverName);

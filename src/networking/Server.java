@@ -1,4 +1,4 @@
-package drawing;
+package networking;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.util.ArrayList;
@@ -15,11 +15,11 @@ public class Server {
 	
 	private List<ServerConnection> connectionList;	// list of client-server connections for this Server
 	
-	public static void main(String[] args) 
+	/*public static void main(String[] args) 
 	{
 		Server server = new Server("localhost", 2000);
 		
-	}
+	}*/
 	
 	public Server(String serverName, int port)
 	{
