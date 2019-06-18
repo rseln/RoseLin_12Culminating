@@ -24,16 +24,6 @@ public class Client {
 	
 	boolean closeConnection;
 	
-	public static void main(String[] args) 
-	{
-		
-		Client client = new Client();
-		client.setPort(2000);
-		client.setServerName("localhost");
-		client.setName("client1");
-		client.connect();
-		
-	}
 	
 	public Client(Server s)
 	{
@@ -69,6 +59,8 @@ public class Client {
 			// initially, send our name to server
 			write(name);
 			
+			System.out.println("Start socket.");
+			
 			Thread sender = new Thread(new Runnable() {
             	@Override
             	public void run() {
@@ -102,16 +94,14 @@ public class Client {
             	public void run() {
             		String msg;
             		
-            		// initially, get name of server
-            		serverName = read();
-            		server.newConnection(serverName);
+            		// initially, get name of server            		
+            		System.out.println("Start receiver");
 
             		closeConnection = socket.isClosed();
             		while(!closeConnection)
             		{
             			msg = read();
             			System.out.println(serverName + "> " + msg.trim());
-            			server.messageToServer(serverName + "> " + msg.trim() + "\n");
             			if(msg.equals("Bye"))
             			{	
             				//write("Bye.");
@@ -122,6 +112,7 @@ public class Client {
             	}	
             });
             receiver.start();
+            System.out.println("Done");
 			
 			return true;
 		} catch (IOException e) {

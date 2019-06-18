@@ -38,7 +38,7 @@ public class ServerConnection  {
 			inStream = socket.getInputStream();
 			dataInStream = new DataInputStream(inStream);
 			
-			write(serverName);
+			//write(serverName);
 		
 		Thread sender = new Thread(new Runnable() {  // not used...except to send client name to server
             	@Override
@@ -51,7 +51,7 @@ public class ServerConnection  {
             		while(!closeConnection)
             		{
             			// initially, send our name to client
-                		write(serverName);
+                		//write(serverName);
             			while(scan.hasNextLine())
         			{
         				String str = scan.nextLine();
@@ -60,7 +60,7 @@ public class ServerConnection  {
         					closeConnection = true;
         					break;
         				}
-        				write(str);
+        				//write(str);
         			}
           		}
            	}	

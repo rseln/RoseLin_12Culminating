@@ -27,6 +27,7 @@ import networking.*;
 public class GuessingGUI extends Application {
 	private int portNumber = 2000;
 	private String ServerAddress;
+	private String word;
 
 	public static void main(String[] args) {
 		launch();
@@ -38,7 +39,6 @@ public class GuessingGUI extends Application {
 		client.setServerAddr(ServerAddress);
 		client.setPort(portNumber);
 		client.setName("Client1");
-		client.connect();
 		
 		// objects
 		Pane root = new Pane(); // base for all layouts
@@ -52,20 +52,6 @@ public class GuessingGUI extends Application {
 		guessInput.setLayoutX(50);
 		guessInput.setLayoutY(427);
 		guessInput.setPrefWidth(170);
-
-		// record the word they are trying to guess
-		ArrayList<String> wordList = new ArrayList<String>();
-		wordList = prompt.getWordList();
-		String word = prompt.getWord(wordList);
-		char[] charWordArray = bank.CharArray(word); // create char array
-		System.out.print(word);
-
-		// prompt that tells user the number of letters in the word
-		Text letterNum = new Text("# of Letters: " + word.length());
-		letterNum.setFont(Font.font("Comic Sans MS", FontWeight.BOLD, 15));
-		letterNum.setFill(Color.WHITE);
-		letterNum.setLayoutX(270);
-		letterNum.setLayoutY(446);
 
 		// undo button
 		Button undo = new Button();
@@ -94,55 +80,12 @@ public class GuessingGUI extends Application {
 		result.setFont(Font.font("Comic Sans MS", FontWeight.BOLD, 50));
 		result.setFill(Color.SKYBLUE);
 
-		// set up letter bank
-		int n = 16;
-		int row1 = 25;
-		int row2 = 25;
-		ArrayList<Character> letterBank = bank.getLetterBank(charWordArray);
-
-		Button[] letterBox = new Button[n];
-
-		for (int i = 0; i < 16; i++) {
-			letterBox[i] = new Button(); // create new rectangles
-			letterBox[i].setMinHeight(33);
-			letterBox[i].setMinWidth(33);
-			letterBox[i].setStyle(
-					"-fx-background-color: LightSeaGreen; -fx-text-fill: #ffffff; -fx-font-family: 'Comic Sans MS'; -fx-font-size: 14px;  -fx-font-weight: bold;");
-			letterBox[i].setText(letterBank.get(i).toString());
-
-			if (i < 8) { // first row
-				letterBox[i].setLayoutX(row1);
-				row1 = row1 + 41;
-				letterBox[i].setLayoutY(462);
-			}
-
-			if (i >= 8) { // second row
-				letterBox[i].setLayoutX(row2);
-				row2 = row2 + 41;
-
-				letterBox[i].setLayoutY(503);
-			}
-
-		}
-
-		// add text to text field once button is clicked
-		for (int i = 0; i < letterBox.length; i++) {
-			String text = letterBox[i].getText();
-			letterBox[i].setOnAction(new EventHandler<ActionEvent>() {
-				public void handle(ActionEvent event) {
-					guessInput.appendText(text);
-					undoStack.add(text); // add text to stack
-				}
-			});
-		}
-
 		// set up button that sends client information to server
 		Button connectBtn = new Button("Connect");
 		connectBtn.setLayoutX(290);
 
 		// set up textfield to input host name
 		TextField hostNameInput = new TextField();
-		String ServerAddress = hostNameInput.getText();
 
 		// set up error message (appears if hostName is not valid)
 		Label errorLabel = new Label();
@@ -174,7 +117,8 @@ public class GuessingGUI extends Application {
 		// submit button; checks if correct
 		submit.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event) {
-				if (guessInput.getText().toLowerCase() == word) {
+				if (guessInput.getText().toLowerCase().equals(word)) {
+					
 					result.setText("Correct :)");
 				}
 
@@ -187,7 +131,73 @@ public class GuessingGUI extends Application {
 		
 		connectBtn.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event) {
-				
+				ServerAddress = hostNameInput.getText();
+				client.setServerAddr(ServerAddress);
+				client.setPort(2000);
+				client.connect();
+				while (word == null) {
+					word = client.read();
+					System.out.println("WORD: " + word);
+					
+					// record the word they are trying to guess
+					char[] charWordArray = bank.CharArray(word); // create char array
+
+					// prompt that tells user the number of letters in the word
+					Text letterNum = new Text("# of Letters: " + word.length());
+					letterNum.setFont(Font.font("Comic Sans MS", FontWeight.BOLD, 15));
+					letterNum.setFill(Color.WHITE);
+					letterNum.setLayoutX(270);
+					letterNum.setLayoutY(446);
+					
+					// set up letter bank
+					int n = 16;
+					int row1 = 25;
+					int row2 = 25;
+					ArrayList<Character> letterBank = bank.getLetterBank(charWordArray);
+
+					Button[] letterBox = new Button[n];
+
+					for (int i = 0; i < 16; i++) {
+						letterBox[i] = new Button(); // create new rectangles
+						letterBox[i].setMinHeight(33);
+						letterBox[i].setMinWidth(33);
+						letterBox[i].setStyle(
+								"-fx-background-color: LightSeaGreen; -fx-text-fill: #ffffff; -fx-font-family: 'Comic Sans MS'; -fx-font-size: 14px;  -fx-font-weight: bold;");
+						letterBox[i].setText(letterBank.get(i).toString());
+
+						if (i < 8) { // first row
+							letterBox[i].setLayoutX(row1);
+							row1 = row1 + 41;
+							letterBox[i].setLayoutY(462);
+						}
+
+						if (i >= 8) { // second row
+							letterBox[i].setLayoutX(row2);
+							row2 = row2 + 41;
+
+							letterBox[i].setLayoutY(503);
+						}
+
+					}
+					
+					root.getChildren().add(letterNum);
+					
+					for (int i = 0; i < letterBox.length; i++)
+						root.getChildren().addAll(letterBox[i]);
+					
+					// add text to text field once button is clicked
+					for (int i = 0; i < letterBox.length; i++) {
+						String text = letterBox[i].getText();
+						letterBox[i].setOnAction(new EventHandler<ActionEvent>() {
+							public void handle(ActionEvent event) {
+								guessInput.appendText(text);
+								undoStack.add(text); // add text to stack
+							}
+						});
+					}
+					
+					System.out.println(word);
+				}
 			}
 
 		});
@@ -206,10 +216,9 @@ public class GuessingGUI extends Application {
 
 		// adding all GUI elements
 		pane.getChildren().addAll(canvas, result);
-		root.getChildren().addAll(pane, guessInput, letterNum, submit, undo, hostNameInput, errorLabel, connectBtn);
+		root.getChildren().addAll(pane, guessInput, submit, undo, hostNameInput, errorLabel, connectBtn);
 
-		for (int i = 0; i < letterBox.length; i++)
-			root.getChildren().addAll(letterBox[i]);
+		
 
 		// creates and shows the window
 		primaryStage.setTitle("Guessing Component");

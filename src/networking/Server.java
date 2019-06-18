@@ -67,13 +67,17 @@ public class Server {
 	public void WaitForConnections()
 	{
 		boolean listening = true;
+		int count = 0;
 		while (listening) {
 			ServerConnection s;
 			try {
 				s = new ServerConnection(serverSocket.accept());
 				s.setServer(this);
-				connectionList.add(s);
-				
+				String name = Integer.toString(count);
+				count++;
+				s.setClientName(name);
+				connectionList.add(s);				
+				this.newConnection(name);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

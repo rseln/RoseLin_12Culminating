@@ -27,6 +27,8 @@ import guessing.Prompt;
 public class DrawingGUI extends Application implements ConnectionListener {
 
 	private int portNumber = 2000;
+	private Server server;
+	private String word;
 
 	public static void main(String args[]) {
 		launch(args);
@@ -34,9 +36,17 @@ public class DrawingGUI extends Application implements ConnectionListener {
 
 	public void start(Stage primaryStage) throws Exception {
 		//server
-		Server server = new Server("localhost", portNumber);
+		server = new Server("localhost", portNumber);
 		server.addConnectionListener(this);
-	
+		
+		Thread listen = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				server.WaitForConnections();
+			}
+		});
+		listen.start();
+
 		// objects
 		Pane root = new Pane(); // base for all layouts
 		StackPane pane = new StackPane(); // holds the canvas
@@ -56,7 +66,7 @@ public class DrawingGUI extends Application implements ConnectionListener {
 		// get drawing prompt
 		ArrayList<String> wordList = new ArrayList<String>();
 		wordList = prompt.getWordList();
-		String word = prompt.getWord(wordList);
+		word = prompt.getWord(wordList);
 
 		// set up and display word prompt
 		Rectangle promptBase = new Rectangle(250, 55);
@@ -190,12 +200,11 @@ public class DrawingGUI extends Application implements ConnectionListener {
 		primaryStage.setTitle("Drawing Application");
 		primaryStage.setScene(scene);
 		primaryStage.show();
-
 	}
 
 	@Override
 	public void newConnection(String name) {
-	
+		server.getConnectionList(name).write(word);
 	}
 
 	@Override
