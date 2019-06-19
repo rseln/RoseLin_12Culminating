@@ -1,6 +1,11 @@
 package drawing;
 
-import javafx.application.Application; 
+//Rose Lin 
+//Mr. Radulovic
+//June 18th, 2019
+//Culminating Assignment: DrawingGUI (Main class for drawing component)
+
+import javafx.application.Application;  
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.event.ActionEvent;
@@ -17,9 +22,6 @@ import javafx.scene.SnapshotParameters;
 import javafx.stage.Stage;
 import networking.*;
 
-import java.io.IOException;
-import java.net.ConnectException;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 
 import guessing.Prompt;
@@ -39,6 +41,7 @@ public class DrawingGUI extends Application implements ConnectionListener {
 		server = new Server("localhost", portNumber);
 		server.addConnectionListener(this);
 		
+		//listen for connections from the client 
 		Thread listen = new Thread(new Runnable() {
 			@Override
 			public void run() {
@@ -46,6 +49,7 @@ public class DrawingGUI extends Application implements ConnectionListener {
 			}
 		});
 		listen.start();
+		
 
 		// objects
 		Pane root = new Pane(); // base for all layouts
@@ -178,12 +182,12 @@ public class DrawingGUI extends Application implements ConnectionListener {
 			}
 		});
 
-		//sends information over to the connected client 
+		//sends image over to client (DOES NOT WORK RIGHT NOW)
 		submit.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent Event) {
-				server.WaitForConnections();
 				WritableImage image = canvas.snapshot(params, null); // take snapshot of canvas
+				
 			}
 		});
 

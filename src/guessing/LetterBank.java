@@ -1,12 +1,17 @@
 package guessing;
 
+//Rose Lin 
+//Mr. Radulovic
+//June 18th, 2019
+//Culminating Project: LetterBank (methods to create arrays that populate the letter bank in the guessing gui)
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
 
 import guessing.Prompt;
 
-public class LetterBank extends Prompt { //ok how do i get rid of all the red text uhhhh
+public class LetterBank extends Prompt { 
 
 	public char getRandomChar() {
 		return (char) ((new Random()).nextInt(26) + 'A');

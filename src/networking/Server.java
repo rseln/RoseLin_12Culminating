@@ -1,4 +1,10 @@
 package networking;
+
+//Rose Lin 
+//Mr. Radulovic
+//June 18th, 2019
+//Culminating Project
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.util.ArrayList;
@@ -14,12 +20,6 @@ public class Server {
 	List<ConnectionListener> listeners;
 	
 	private List<ServerConnection> connectionList;	// list of client-server connections for this Server
-	
-	/*public static void main(String[] args) 
-	{
-		Server server = new Server("localhost", 2000);
-		
-	}*/
 	
 	public Server(String serverName, int port)
 	{

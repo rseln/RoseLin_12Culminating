@@ -1,4 +1,10 @@
 package networking;
+
+//Rose Lin 
+//Mr. Radulovic
+//June 18th, 2019
+//Culminating Project
+
 import java.io.DataInputStream; 
 import java.io.DataOutputStream;
 import java.io.IOException;

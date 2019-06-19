@@ -1,5 +1,10 @@
 package guessing;
 
+//Rose Lin 
+//Mr. Radulovic
+//June 18th, 2019
+//Culminating Project: Prompt (Provides methods to get the work prompt)
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;

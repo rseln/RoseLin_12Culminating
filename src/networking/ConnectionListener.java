@@ -1,7 +1,9 @@
 package networking;
 
-import java.util.ArrayList;
-
+//Rose Lin 
+//Mr. Radulovic
+//June 18th, 2019
+//Culminating Project
 
 public interface ConnectionListener {
 	/**

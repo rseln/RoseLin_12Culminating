@@ -1,8 +1,10 @@
 package guessing;
 
-import java.io.IOException; 
-import java.net.ConnectException;
-import java.net.UnknownHostException;
+//Rose Lin 
+//Mr. Radulovic
+//June 18th, 2019
+//Culminating Assignment: GuessingGUI (Main class for Guessing component)
+
 import java.util.ArrayList;
 import java.util.Stack;
 
@@ -17,6 +19,7 @@ import javafx.scene.paint.*;
 import javafx.scene.Scene;
 import javafx.scene.layout.*;
 import javafx.scene.canvas.*;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
@@ -82,24 +85,29 @@ public class GuessingGUI extends Application {
 
 		// set up button that sends client information to server
 		Button connectBtn = new Button("Connect");
-		connectBtn.setLayoutX(290);
+		connectBtn.setLayoutX(250);
+		connectBtn.setLayoutY(5);
 
 		// set up textfield to input host name
 		TextField hostNameInput = new TextField();
+		hostNameInput.setLayoutX(85);
+		hostNameInput.setLayoutY(5);
+		
+		// set up label for hostNameInput
+		Label inputLable = new Label();
+		inputLable.setLayoutX(10);
+		inputLable.setLayoutY(10);
+		inputLable.setText("Server Name:");
 
 		// set up error message (appears if hostName is not valid)
 		Label errorLabel = new Label();
 		errorLabel.setLayoutY(25);
 		errorLabel.setTextFill(Color.RED);
 
-		// sends client information over to the server
-		connectBtn.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent Event) {
-
-			}
-		});
-
+		// more formatting (bar for the server stuff)
+		Rectangle backing = new Rectangle(500,37);
+		backing.setFill(Color.LIGHTGRAY);
+		
 		// undo button; undos the last letter
 		undo.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event) {
@@ -129,12 +137,14 @@ public class GuessingGUI extends Application {
 
 		});
 		
+		//connects the client to the server
 		connectBtn.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event) {
 				ServerAddress = hostNameInput.getText();
 				client.setServerAddr(ServerAddress);
 				client.setPort(2000);
 				client.connect();
+				
 				while (word == null) {
 					word = client.read();
 					System.out.println("WORD: " + word);
@@ -216,7 +226,7 @@ public class GuessingGUI extends Application {
 
 		// adding all GUI elements
 		pane.getChildren().addAll(canvas, result);
-		root.getChildren().addAll(pane, guessInput, submit, undo, hostNameInput, errorLabel, connectBtn);
+		root.getChildren().addAll(pane,backing, guessInput, submit, undo, hostNameInput, errorLabel, connectBtn, inputLable);
 
 		
 

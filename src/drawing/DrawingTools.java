@@ -1,5 +1,10 @@
 package drawing;
 
+//Rose Lin 
+//Mr. Radulovic
+//June 18th, 2019
+//Culminating Project: DrawingTools (methods all pertain towards drawing elements for the drawing Gui)
+
 import javafx.scene.paint.*; 
 import javafx.scene.canvas.*;
 
